@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<html lang="ar">
+
+</html>
+<head>
+    <!-- Swiper CSS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+
+<!-- Swiper JS -->
+<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" href="img/LOGO.png">
+    <title>Tornel</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.3/jquery.validate.min.js"></script>
+    
+</head>
+<body style="background-image: url('img/cover.webp'); background-size: 100% 100%; background-position: center; background-repeat: no-repeat;">
+
+    
+    <section class="home">
+        <div class="container mx-auto px-4 py-8">
+            <div class="slider">
+                
+        <form id="product"><div align="center">
+            <h2 class="h2">PRODUCT AUTHENTICATION</h2>
+            <pr></pr>
+            <p class="p">Please enter the secret product code from the on pack verification sticker</p>
+        </div>
+            <br>
+            <div class="boxx">
+                <div align="center" class="box">
+                    <input type="text" name="code" class="text" placeholder="Enter product serial number" maxlength="9">
+                </div>
+            </div>
+            <br>
+            <div align="center">
+            <button type="submit" class="btn"> VERIFY</button>
+            
+        </form>
+        <div class="auth-result-wrapper" style="margin-top: 20px;"></div>
+        
+    <div class="container">
+        
+        
+        <div class="container mx-auto px-4 py-8">
+            <div class="swiper mySwiper">
+                <div class="swiper-wrapper">
+                  <div class="swiper-slide"><img src="img/1.jpg" alt="إعلان 1"></div>
+                  <div class="swiper-slide"><img src="img/2.jpg" alt="إعلان 2"></div>
+                  <div class="swiper-slide"><img src="img/3.jpg" alt="إعلان 3"></div>
+                  <div class="swiper-slide"><img src="img/4.jpg" alt="4"></div>
+                  <div class="swiper-slide"><img src="img/5.jpg" alt="إعلان 5"></div>
+         
+            
+                </div>
+                <div class="swiper-pagination"></div> <!-- النقاط هنا -->
+              </div>
+    </section>
+
+
+
+
+    <script>
+        // Initialize all sliders
+$('.slider-container').each(function() {
+    const slider = $(this).find('.slider');
+    const slides = slider.find('.slide');
+    let currentSlide = 0;
+    
+    function showSlide(index) {
+        slides.removeClass('active');
+        slides.eq(index).addClass('active');
+    }
+    
+    setInterval(() => {
+        currentSlide = (currentSlide + 1) % slides.length;
+        showSlide(currentSlide);
+    }, 3000);
+});
+    </script>
+
+<script>
+    // التعديلات في قسم التحقق
+    $(document).ready(function() {
+        // ... (الكود السابق يبقى كما هو)
+        let currentSlide = 0;
+            const slider = $('.home .slider');
+            const slides = slider.find('.slide');
+            let sliderInterval;
+    
+            function showSlide(index) {
+                slides.removeClass('active');
+                slides.eq(index).addClass('active');
+            }
+    
+            function startSlider() {
+                sliderInterval = setInterval(() => {
+                    currentSlide = (currentSlide + 1) % slides.length;
+                    showSlide(currentSlide);
+                }, 3000);
+            }
+    
+            function stopSlider() {
+                clearInterval(sliderInterval);
+            }
+    
+            startSlider();
+    
+        $("#product").validate({
+            errorClass: "error",
+            rules: {
+                code: {
+                    required: true,
+                    minlength: 9,
+                    maxlength: 9
+                },
+                name: "required",
+                phone: {
+                    required: true,
+                    digits: true,
+                    minlength: 11
+                },
+                agree: "required"
+            },
+            messages: {
+                    code: {
+                        required: "الرجاء إدخال الرمز التسلسلي",
+                        minlength: "الرجاء إدخال الرمز التسلسلي",
+                        maxlength: "الرجاء إدخال الرمز التسلسلي",
+                        alphanumeric: "  " // رسالة محدثة
+                    },
+                    name: "الرجاء إدخال الاسم بالكامل",
+                    phone: {
+                        required: "الرجاء إدخال رقم الهاتف",
+                        digits: "الرجاء إدخال أرقام فقط",
+                        minlength: "رقم الهاتف يجب أن يكون 11 أرقام على الأقل"
+                    },
+                    agree: "يجب الموافقة على الشروط للمتابعة"
+                },
+            submitHandler: function(form) {
+                stopSlider();
+                slider.css('opacity', '0');
+
+                // التحقق الفعلي من صحة الكود هنا
+                const codeValue = $('input[name="code"]').val();
+                const isValidCode = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{9}$/.test(codeValue);
+
+                const resultContainer = $('<div class="result-container"></div>').css({
+                    'position': 'fixed',
+                    'top': '50%',
+                    'left': '50%',
+                    'transform': 'translate(-50%, -50%)',
+                    'z-index': '1000',
+                    'text-align': 'center',
+                    'animation': 'fadeIn 0.5s ease'
+                });
+
+                const resultImg = $('<img>')
+                    .attr('src', isValidCode ? 'img/correct.jpg' : 'img/wrong.jpg')
+                    .css({
+                        'max-width': '450px',
+                        'width': '90vw',
+                        'height': 'auto',
+                        'border-radius': '10px',
+                        'box-shadow': '0 0 20px rgba(0,0,0,0.3)'
+                    });
+
+                resultContainer.append(resultImg);
+                $('body').append(resultContainer);
+
+                setTimeout(() => {
+                    resultContainer.remove();
+                    slider.css('opacity', '1');
+                    startSlider();
+                    form.reset();
+                }, 5000);
+            }
+        });
+    });
+
+    // إزالة التحقق القديم من الخليط
+    // $.validator.addMethod("alphanumeric", ...) // تم إزالة هذا القسم
+    document.addEventListener("DOMContentLoaded", function () {
+  var swiper = new Swiper(".mySwiper", {
+    loop: true, // يخلي السلايدر يلف بشكل مستمر
+    autoplay: {
+      delay: 3000, // تغيير الصورة كل 3 ثواني
+      disableOnInteraction: false,
+    },
+    pagination: {
+      el: ".swiper-pagination",
+      clickable: true, // يقدر المستخدم يضغط على النقاط للتنقل
+    },
+  });
+});
+
+
+</script>
+<button id="back-to-top">
+    ↑
+  </button>
+
+<script>
+const backToTopButton = document.getElementById("back-to-top");
+
+// عرض الزر عند التمرير لأسفل
+window.addEventListener("scroll", () => {
+if (window.scrollY > 200) {
+  backToTopButton.classList.add("show");
+} else {
+  backToTopButton.classList.remove("show");
+}
+});
+
+// الانتقال لأعلى الصفحة عند النقر
+backToTopButton.addEventListener("click", () => {
+window.scrollTo({
+  top: 0,
+  behavior: "smooth"
+});
+});
+</script>
+
+
+    
+    
+   
+
+</body>
+</html>
